@@ -1,0 +1,4 @@
+width = float(input("Введите длину первой стороны: "))
+height = float(input("Введите длину второй стороны: "))
+area = width * height
+print("Площадь прямоугольника:", area)
