@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
 path_file_csv = 'datasets/heart.csv'
-
 df = pd.read_csv(path_file_csv)
 
 
