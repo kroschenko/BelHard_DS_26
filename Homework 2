@@ -1,0 +1,62 @@
+from sklearn.preprocessing import MinMaxScaler
+import plotly.express as px
+import pandas as pd
+df = pd.read_csv ('heart.csv')
+# 1) Проверка наличия пропусков
+print('1) Проверка пропусков (по колонкам):')
+print(df.isnull().sum())
+print('\n')
+
+# 2) Столбчатая диаграма сравнивающая здоровых и больных
+fig_bar = px.bar(df['target'].value_counts().sort_index(),
+                 labels={'index':'target','value':'count'},
+                 title='Количество здоровых (0) и больных (1)')
+fig_bar.write_html('task2_target_bar.html', include_plotlyjs='cdn')
+print("2) Сохранён столбчатый график: task2_target_bar.html")
+
+# 3) Диаграмма рассеяния thalach vs age, раскрашенная по наличию болезни
+fig_scatter = px.scatter(df, x='age', y='thalach', color=df['target'].map({0:'healthy',1:'disease'}),
+                         labels={'color':'target','age':'age','thalach':'thalach'},
+                         title='thalach (макс пульс) vs age, по наличию болезни')
+fig_scatter.write_html('task3_scatter_thalach_age.html', include_plotlyjs='cdn')
+print('3) Сохранён scatter: task3_scatter_thalach_age.html')
+ 
+ # 4) Преобразование sex: 0->female, 1->male и One-Hot Encoding
+df_encoded = df.copy()
+df_encoded['sex_cat'] = df_encoded['sex'].map({0:'female',1:'male'})
+ # One-hot
+sex_dummies = pd.get_dummies(df_encoded['sex_cat'], prefix='sex')
+df_encoded = pd.concat([df_encoded, sex_dummies], axis=1)
+# Optionally drop original sex and sex_cat if needed, but keep for clarity
+ # Save
+df_encoded.to_csv('df_encoded_sex_onehot.csv', index=False)
+print('4) Преобразован sex -> sex_cat (female/male) и выполнено One-Hot. Файл: df_encoded_sex_onehot.csv')
+print(df_encoded[['sex','sex_cat','sex_female','sex_male']].head())
+ 
+ # 5) Средний уровень холестерина (chol) для больных и здоровых
+means = df.groupby('target')['chol'].mean()
+print('\n5) Средний chol по группам target:')
+print(means)
+ 
+ # 6) Нормализация признаков age, trestbps, chol, thalach (Min-Max)
+cols_to_norm = ['age','trestbps','chol','thalach']
+scaler = MinMaxScaler()
+df_norm = df.copy()
+df_norm[cols_to_norm] = scaler.fit_transform(df_norm[cols_to_norm])
+df_norm.to_csv('df_normalized_minmax.csv', index=False)
+print('\n6) Нормализованы колонки', cols_to_norm, 'и сохранён файл: df_normalized_minmax.csv')
+print('\nПервые 5 строк нормализованного датасета:')
+print(df_norm[cols_to_norm].head())
+
+ # Print summary of created files
+print('\nСозданные файлы:')
+print('- task2_target_bar.html')
+print('- task3_scatter_thalach_age.html')
+print('- df_encoded_sex_onehot.csv')
+print('- df_normalized_minmax.csv')
+ 
+# Return path of one file for the caller
+{
+'files': ['task2_target_bar.html','task3_scatter_thalach_age.html','df_encoded_sex_onehot.csv','df_normalized_minmax.csv'],
+'means_chol_by_target': means.to_dict()
+ }
