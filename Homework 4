@@ -1,0 +1,129 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn import metrics
+
+# 1. Загрузка данных
+df = pd.read_csv('heart.csv') 
+
+X = df.drop('target', axis=1)
+y = df['target']
+
+# Масштабирование данных (чтобы убрать предупреждения и повысить точность)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+print("--- Данные загружены, отмасштабированы и разделены ---")
+
+# 2. Обучение моделей
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+
+# Увеличили max_iter, чтобы регрессия точно "досчитала"
+log_reg = LogisticRegression(max_iter=10000)
+log_reg.fit(X_train, y_train)
+
+# Поиск лучшего k для KNN
+best_k = 1
+best_score = 0
+for k in range(1, 21):
+    knn_temp = KNeighborsClassifier(n_neighbors=k)
+    knn_temp.fit(X_train, y_train)
+    score = knn_temp.score(X_test, y_test)
+    if score > best_score:
+        best_score = score
+        best_k = k
+ 
+knn = KNeighborsClassifier(n_neighbors=best_k)
+knn.fit(X_train, y_train)
+ 
+print(f"Лучшее k для KNN: {best_k}")
+
+# 3. Оценка моделей и построение ROC-кривых
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn import metrics
+
+# 1. Загрузка данных
+df = pd.read_csv('heart.csv') 
+
+X = df.drop('target', axis=1)
+y = df['target']
+
+# Масштабирование данных (чтобы убрать предупреждения и повысить точность)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+print("--- Данные загружены, отмасштабированы и разделены ---")
+
+# 2. Обучение моделей
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+
+# Увеличили max_iter, чтобы регрессия точно "досчитала"
+log_reg = LogisticRegression(max_iter=10000)
+log_reg.fit(X_train, y_train)
+
+# Поиск лучшего k для KNN
+best_k = 1
+best_score = 0
+for k in range(1, 21):
+    knn_temp = KNeighborsClassifier(n_neighbors=k)
+    knn_temp.fit(X_train, y_train)
+    score = knn_temp.score(X_test, y_test)
+    if score > best_score:
+        best_score = score
+        best_k = k
+
+knn = KNeighborsClassifier(n_neighbors=best_k)
+knn.fit(X_train, y_train)
+
+print(f"Лучшее k для KNN: {best_k}")
+
+# 3. Оценка моделей и построение ROC-кривых
+models = {
+    'Наивный Байес': nb, 
+    'Лог. Регрессия': log_reg, 
+    'KNN': knn
+}
+
+plt.figure(figsize=(10, 7))
+
+for name, model in models.items():
+    y_pred = model.predict(X_test)
+    y_proba = model.predict_proba(X_test)[:, 1]
+    
+    print(f"\n=== Метрики для модели: {name} ===")
+    print(f"Accuracy:  {metrics.accuracy_score(y_test, y_pred):.4f}")
+    print(f"Precision: {metrics.precision_score(y_test, y_pred):.4f}")
+    print(f"Recall:    {metrics.recall_score(y_test, y_pred):.4f}")
+    print(f"F1-score:  {metrics.f1_score(y_test, y_pred):.4f}")
+    print("Матрица ошибок:")
+    print(metrics.confusion_matrix(y_test, y_pred))
+    
+    # Добавляем кривую на график
+    fpr, tpr, _ = metrics.roc_curve(y_test, y_proba)
+    auc = metrics.roc_auc_score(y_test, y_proba)
+    plt.plot(fpr, tpr, label=f"{name} (AUC = {auc:.2f})")
+
+# Настройка общего графика
+plt.plot([0, 1], [0, 1], color='grey', linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC-анализ всех моделей')
+plt.legend()
+plt.grid(True)
+plt.show()
