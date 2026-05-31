@@ -1,0 +1,101 @@
+import numpy as np
+from io import StringIO
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.core.pylabtools import figsize
+from matplotlib.pyplot import title
+from numpy import dtype
+from pandas.core.interchange import column
+
+#Задание 1
+df = pd.read_csv("data\\heart.csv")
+print('ВЫВОД МАССИВА')
+df.head()
+#======================================================
+# 2 Постройте столбчатую диаграмму, сравнивающую количество здоровых и больных пациентов
+
+# column chart
+c_list = [(temp_df["target"] ==0).sum(), (temp_df["target"]==1).sum()] #count by each attribute
+l_list = ["Healthy", "Unhealthy"]
+plt.bar(l_list, c_list, color = ['blue', 'red'], align='center')
+plt.show()
+#======================================================
+#. 3. Создайте диаграмму рассеяния, показывающую зависимость максимального пульса (thalach) от возраста (age). Раскрасьте точки в
+# зависимости от наличия болезни
+import matplotlib.pyplot as plt
+import seaborn as sns
+# 3.1 сначала фильтруем данные
+
+age_health = df[df["target"]==0]
+age_unhealth = df[df["target"]==1]
+
+# 3.2 размер
+plt.figure(figsize=(10, 6))
+# 3.3. Рисуем точки для здоровых людей (зеленый цвет)
+plt.scatter(
+    age_health["age"],
+    age_health["thalach"],
+    color="green",
+    label="Здоровы",
+    alpha=0.7
+)
+# 3.4. Рисуем точки для больных людей (красный цвет)
+plt.scatter(
+    age_unhealth["age"],
+    age_unhealth["thalach"],
+    color="red",
+    label="Больны",
+    alpha=0.7
+)
+
+# 3.5. Настраиваем подписи и внешний вид
+plt.title("Зависимость максимального пульса от возраста")
+plt.xlabel("Возраст (age)")
+plt.ylabel("Максимальный пульс (thalach)")
+plt.legend()  # Отображает легенду (какой цвет за что отвечает)
+plt.grid(True, linestyle="--", alpha=0.5)  # Добавляет сетку
+
+# 3.6. Показываем график
+plt.show()
+#========================================================
+#4. Преобразуйте признак sex (0 = женщина, 1 = мужчина) в более читаемый формат с категориями 'female' и 'male', а затем примените к
+#немуOne-Hot Encoding.#
+import string
+temp_df = df.copy()
+#print(temp_df)
+
+sex_map = {0: 'female', 1: 'male'}
+temp_df["sex"] = temp_df["sex"].replace(sex_map)
+
+#Преобразуем бул в инт
+df_dummies = pd.get_dummies(temp_df, columns=['sex'], dtype=int)
+#print(df_dummies.head())
+print("\nВсе колонки датасета:")
+print(df_dummies.columns.tolist())
+print(pd.get_dummies(temp_df[["sex", "age","chol", "fbs"]], dtype=int))
+
+#=====================================================================
+#5.  Рассчитайте средний уровень холестерина (chol) для больных и
+#здоровых пациентов.
+#Группируем для таргет
+chol_means = df.groupby('target')['chol'].mean()
+print('Средний уровень холестерина')
+print(f"\t Здоровые пациенты {0}: {chol_means [0]:.2f}")
+print(f"\t Больные пациенты {1}: {chol_means [1]:.2f}")
+
+#=======================================================================
+#6. Выполните нормализацию признаков age, trestbps, chol и thalach.
+from sklearn.preprocessing import minmax_scale, MinMaxScaler
+
+#create an object Normalization
+scaler = MinMaxScaler()
+#list of feature to be normalized
+cols_to_normal = ['age', 'trestbps', 'chol', 'thalach']
+#apply normalization
+df[cols_to_normal] = scaler.fit_transform(df[cols_to_normal])
+
+#Display results
+print('======================\n task 6 Normalization results\n')
+display(df[cols_to_normal].head())
+
+
