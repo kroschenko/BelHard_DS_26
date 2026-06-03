@@ -1,0 +1,118 @@
+D:\Python\Telegram_AI_Analyzer\.venv\Scripts\python.exe D:\Python\BelHard_DS_26\Homeworks\Astapov\hw_6\del_1.py 
+Устройство: cuda
+
+Средние значения RGB:
+tensor([0.4303, 0.4574, 0.4538])
+
+Стандартное отклонение:
+tensor([0.2523, 0.2486, 0.2654])
+
+Классы:
+['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
+
+Количество train изображений: 14034
+Количество test изображений: 3000
+
+Архитектура модели:
+
+SceneCNN(
+  (features): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (4): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (10): ReLU()
+    (11): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (12): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (13): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): ReLU()
+    (15): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (classifier): Sequential(
+    (0): Flatten(start_dim=1, end_dim=-1)
+    (1): Linear(in_features=256, out_features=128, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.4, inplace=False)
+    (4): Linear(in_features=128, out_features=6, bias=True)
+  )
+)
+
+Размер входа: torch.Size([1, 3, 128, 128])
+Размер выхода: torch.Size([1, 6])
+
+Начало обучения...
+
+Эпоха [1/20] | Ошибка train: 0.9253 | Точность train: 0.6398 | Ошибка test: 0.6933 | Точность test: 0.7387 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [2/20] | Ошибка train: 0.6862 | Точность train: 0.7502 | Ошибка test: 0.5834 | Точность test: 0.7797 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [3/20] | Ошибка train: 0.6186 | Точность train: 0.7804 | Ошибка test: 0.6752 | Точность test: 0.7523 | LR: 0.001000
+Эпоха [4/20] | Ошибка train: 0.5668 | Точность train: 0.7919 | Ошибка test: 0.5075 | Точность test: 0.8187 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [5/20] | Ошибка train: 0.5268 | Точность train: 0.8116 | Ошибка test: 0.4764 | Точность test: 0.8237 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [6/20] | Ошибка train: 0.5087 | Точность train: 0.8179 | Ошибка test: 0.4557 | Точность test: 0.8350 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [7/20] | Ошибка train: 0.4803 | Точность train: 0.8277 | Ошибка test: 0.5990 | Точность test: 0.7863 | LR: 0.001000
+Эпоха [8/20] | Ошибка train: 0.4649 | Точность train: 0.8327 | Ошибка test: 0.4004 | Точность test: 0.8593 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [9/20] | Ошибка train: 0.4396 | Точность train: 0.8416 | Ошибка test: 0.3953 | Точность test: 0.8670 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [10/20] | Ошибка train: 0.4265 | Точность train: 0.8467 | Ошибка test: 0.4187 | Точность test: 0.8613 | LR: 0.001000
+Эпоха [11/20] | Ошибка train: 0.4192 | Точность train: 0.8519 | Ошибка test: 0.4581 | Точность test: 0.8383 | LR: 0.001000
+Эпоха [12/20] | Ошибка train: 0.4118 | Точность train: 0.8558 | Ошибка test: 0.3508 | Точность test: 0.8703 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [13/20] | Ошибка train: 0.3964 | Точность train: 0.8604 | Ошибка test: 0.3909 | Точность test: 0.8550 | LR: 0.001000
+Эпоха [14/20] | Ошибка train: 0.3882 | Точность train: 0.8618 | Ошибка test: 0.3665 | Точность test: 0.8697 | LR: 0.001000
+Эпоха [15/20] | Ошибка train: 0.3757 | Точность train: 0.8640 | Ошибка test: 0.3588 | Точность test: 0.8770 | LR: 0.001000
+Лучшая модель сохранена.
+
+Эпоха [16/20] | Ошибка train: 0.3795 | Точность train: 0.8688 | Ошибка test: 0.3846 | Точность test: 0.8587 | LR: 0.000500
+Эпоха [17/20] | Ошибка train: 0.3202 | Точность train: 0.8876 | Ошибка test: 0.3707 | Точность test: 0.8710 | LR: 0.000500
+Эпоха [18/20] | Ошибка train: 0.3117 | Точность train: 0.8923 | Ошибка test: 0.3133 | Точность test: 0.8920 | LR: 0.000500
+Лучшая модель сохранена.
+
+Эпоха [19/20] | Ошибка train: 0.3066 | Точность train: 0.8900 | Ошибка test: 0.3176 | Точность test: 0.8860 | LR: 0.000500
+Эпоха [20/20] | Ошибка train: 0.2952 | Точность train: 0.8950 | Ошибка test: 0.3318 | Точность test: 0.8820 | LR: 0.000500
+
+Отчет по классификации:
+
+              precision    recall  f1-score   support
+
+   buildings       0.84      0.93      0.88       437
+      forest       0.98      0.97      0.98       474
+     glacier       0.87      0.84      0.85       553
+    mountain       0.85      0.84      0.85       525
+         sea       0.88      0.93      0.90       510
+      street       0.94      0.86      0.90       501
+
+    accuracy                           0.89      3000
+   macro avg       0.89      0.89      0.89      3000
+weighted avg       0.89      0.89      0.89      3000
+
+
+Итоговая точность: 0.8920
+
+Анализ ошибок:
+- glacier и mountain похожи по текстурам.
+- buildings и street содержат похожие городские объекты.
+- sea иногда включает берег и горы.
+
+Для улучшения модели можно использовать transfer learning или более глубокую CNN.
+
+Процесс завершен с кодом выхода 0
